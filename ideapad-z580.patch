@@ -1,15 +1,16 @@
 --- a/drivers/platform/x86/ideapad-laptop.c
 +++ b/drivers/platform/x86/ideapad-laptop.c
-@@ -387,9 +387,8 @@
+@@ -405,8 +405,11 @@
  		return 0;
  	if (sscanf(buf, "%i", &state) != 1)
  		return -EINVAL;
-+    if (state != 8) //It allows to set performance mode on Z580
-+	    if (state < 0 || state > 4 || state == 3)
-+		    return -EINVAL;
 -	if (state < 0 || state > 4 || state == 3)
 -		return -EINVAL;
- 	ret = write_ec_cmd(ideapad_handle, VPCCMD_W_FAN, state);
++    if (state != 8)
++    {
++	    if (state < 0 || state > 4 || state == 3)
++		    return -EINVAL;
++    }
+ 	ret = write_ec_cmd(priv->adev->handle, VPCCMD_W_FAN, state);
  	if (ret < 0)
  		return -EIO;
-
